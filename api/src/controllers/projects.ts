@@ -1,10 +1,12 @@
-import { Project } from 'mongooseEntities';
+/* eslint-disable no-underscore-dangle */
+import { Issue, Project } from 'mongooseEntities';
 import { BadUserInputError, EntityNotFoundError, catchErrors } from 'errors';
 
 export const getProjectWithUsersAndIssues = catchErrors(async (_, res) => {
-  const project = await Project.findOne()
-    .populate('users')
-    .populate('issues');
+  const project = await Project.findOne().populate('users');
+  if (project) {
+    project.issues = await Issue.find({ project: project._id });
+  }
 
   res.respond({
     project,

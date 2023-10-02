@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
@@ -39,7 +40,7 @@ const ProjectBoardList = ({ status, project, filters, currentUserId }) => {
             data-testid={`board-list:${status}`}
           >
             {filteredListIssues.map((issue, index) => (
-              <Issue key={issue.id} projectUsers={project.users} issue={issue} index={index} />
+              <Issue key={issue._id} projectUsers={project.users} issue={issue} index={index} />
             ))}
             {provided.placeholder}
           </Issues>
@@ -57,10 +58,10 @@ const filterIssues = (projectIssues, filters, currentUserId) => {
     issues = issues.filter(issue => issue.title.toLowerCase().includes(searchTerm.toLowerCase()));
   }
   if (userIds.length > 0) {
-    issues = issues.filter(issue => intersection(issue.userIds, userIds).length > 0);
+    issues = issues.filter(issue => intersection(issue.users, userIds).length > 0);
   }
   if (myOnly && currentUserId) {
-    issues = issues.filter(issue => issue.userIds.includes(currentUserId));
+    issues = issues.filter(issue => issue.users.includes(currentUserId));
   }
   if (recent) {
     issues = issues.filter(issue => moment(issue.updatedAt).isAfter(moment().subtract(3, 'days')));

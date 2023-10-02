@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -14,7 +15,7 @@ const propTypes = {
 const ProjectBoardIssueDetailsDelete = ({ issue, fetchProject, modalClose }) => {
   const handleIssueDelete = async () => {
     try {
-      await api.delete(`/issues/${issue.id}`);
+      await api.delete(`/issues/${issue._id}`);
       await fetchProject();
       modalClose();
     } catch (error) {

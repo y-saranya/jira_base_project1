@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 
@@ -49,7 +50,7 @@ const ProjectBoardIssueDetails = ({
       currentFields: issue,
       setLocalData: fields => {
         updateLocalIssueDetails(fields);
-        updateLocalProjectIssues(issue.id, fields);
+        updateLocalProjectIssues(issue._id, fields);
       },
     });
   };

@@ -1,53 +1,50 @@
-import { IIssue, Issue } from 'mongooseEntities';
-import { Issue as EnIssue } from 'entities';
-import { catchErrors } from 'errors';
-import { updateEntity, deleteEntity, findEntityOrThrow } from 'utils/typeorm';
+import { Comment, IIssue, Issue } from 'mongooseEntities';
+import { BadUserInputError, EntityNotFoundError, catchErrors } from 'errors';
 
 export const getProjectIssues = catchErrors(async (req, res) => {
   const { _id } = req.currentUser;
-  // const { searchTerm } = req.query;
-
-  // let whereSQL = 'issue._id = :_id';
-
-  // if (searchTerm) {
-  //   whereSQL += ' AND (issue.title ILIKE :searchTerm OR issue.descriptionText ILIKE :searchTerm)';
-  // }
-
-  // const issues = await Issue.createQueryBuilder('issue')
-  //   .select()
-  //   .where(whereSQL, { _id, searchTerm: `%${searchTerm}%` })
-  //   .getMany();
-
   const issues = await Issue.find({ users: _id });
-
   res.respond({ issues });
 });
 
 export const getIssueWithUsersAndComments = catchErrors(async (req, res) => {
-  const issue = await findEntityOrThrow(EnIssue, req.params.issueId, {
-    relations: ['users', 'comments', 'comments.user'],
-  });
+  const { issueId } = req.params;
+  if (!issueId) {
+    throw new BadUserInputError({ issueId });
+  }
+  const issue = await Issue.findOne({ _id: issueId }).populate('users');
+
+  if (issue) {
+    issue.comments = await Comment.find({ issue: issueId });
+  }
   res.respond({ issue });
 });
 
 export const create = catchErrors(async (req, res) => {
   const listPosition = await calculateListPosition(req.body);
-  console.log(listPosition, 'listPositions');
-  // const issue = await createEntity(EnIssue, { ...req.body, listPosition });
-  console.log(req.currentUser, 'projectId');
   const issue = new Issue({ ...req.body, listPosition });
   await issue.save();
-  console.log(issue, 'issue');
   res.respond({ issue });
 });
 
 export const update = catchErrors(async (req, res) => {
-  const issue = await updateEntity(EnIssue, req.params.issueId, req.body);
+  const { issueId } = req.params;
+  if (!issueId) {
+    throw new BadUserInputError({ issueId });
+  }
+  const issue = await Issue.updateOne({ _id: issueId }, req.body);
+  if (!issue) {
+    throw new EntityNotFoundError(Issue.name);
+  }
   res.respond({ issue });
 });
 
 export const remove = catchErrors(async (req, res) => {
-  const issue = await deleteEntity(EnIssue, req.params.issueId);
+  const { issueId } = req.params;
+  if (!issueId) {
+    throw new BadUserInputError({ issueId });
+  }
+  const issue = await Issue.deleteOne({ _id: issueId });
   res.respond({ issue });
 });
 

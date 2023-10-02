@@ -25,7 +25,7 @@ const ProjectBoardIssueDetailsCommentsCreate = ({ issueId, fetchIssue }) => {
   const handleCommentCreate = async () => {
     try {
       setCreating(true);
-      await api.post(`/comments`, { body, issueId, userId: currentUser._id });
+      await api.post(`/comments`, { body, issue: issueId, user: currentUser._id });
       await fetchIssue();
       setFormOpen(false);
       setCreating(false);

@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { DragDropContext } from 'react-beautiful-dnd';
@@ -22,14 +23,16 @@ const ProjectBoardLists = ({ project, filters, updateLocalProjectIssues }) => {
   const handleIssueDrop = ({ draggableId, destination, source }) => {
     if (!isPositionChanged(source, destination)) return;
 
-    const issueId = Number(draggableId);
+    const issueId = draggableId;
+
+    console.log(source, draggableId, destination, "destination")
 
     api.optimisticUpdate(`/issues/${issueId}`, {
       updatedFields: {
         status: destination.droppableId,
         listPosition: calculateIssueListPosition(project.issues, destination, source, issueId),
       },
-      currentFields: project.issues.find(({ id }) => id === issueId),
+      currentFields: project.issues.find(({ _id }) => _id === issueId),
       setLocalData: fields => updateLocalProjectIssues(issueId, fields),
     });
   };
@@ -76,7 +79,7 @@ const calculateIssueListPosition = (...args) => {
 
 const getAfterDropPrevNextIssue = (allIssues, destination, source, droppedIssueId) => {
   const beforeDropDestinationIssues = getSortedListIssues(allIssues, destination.droppableId);
-  const droppedIssue = allIssues.find(issue => issue.id === droppedIssueId);
+  const droppedIssue = allIssues.find(issue => issue._id === droppedIssueId);
   const isSameList = destination.droppableId === source.droppableId;
 
   const afterDropDestinationIssues = isSameList

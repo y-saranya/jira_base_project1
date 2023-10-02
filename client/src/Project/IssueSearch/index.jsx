@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
@@ -85,12 +86,12 @@ const ProjectIssueSearch = ({ project }) => {
 };
 
 const renderIssue = issue => (
-  <Link key={issue.id} to={`/project/board/issues/${issue.id}`}>
+  <Link key={issue._id} to={`/project/board/issues/${issue._id}`}>
     <Issue>
       <IssueTypeIcon type={issue.type} size={25} />
       <IssueData>
         <IssueTitle>{issue.title}</IssueTitle>
-        <IssueTypeId>{`${issue.type}-${issue.id}`}</IssueTypeId>
+        <IssueTypeId>{`${issue.type}-${issue._id}`}</IssueTypeId>
       </IssueData>
     </Issue>
   </Link>

@@ -1,18 +1,29 @@
-import { Comment } from 'entities';
-import { catchErrors } from 'errors';
-import { updateEntity, deleteEntity, createEntity } from 'utils/typeorm';
+import { BadUserInputError, EntityNotFoundError, catchErrors } from 'errors';
+import { Comment } from 'mongooseEntities';
 
 export const create = catchErrors(async (req, res) => {
-  const comment = await createEntity(Comment, req.body);
+  const comment = new Comment({ ...req.body });
+  await comment.save();
   res.respond({ comment });
 });
 
 export const update = catchErrors(async (req, res) => {
-  const comment = await updateEntity(Comment, req.params.commentId, req.body);
+  const { commentId } = req.params;
+  if (!commentId) {
+    throw new BadUserInputError({ commentId });
+  }
+  const comment = await Comment.updateOne({ _id: commentId }, req.body);
+  if (!comment) {
+    throw new EntityNotFoundError(Comment.name);
+  }
   res.respond({ comment });
 });
 
 export const remove = catchErrors(async (req, res) => {
-  const comment = await deleteEntity(Comment, req.params.commentId);
+  const { commentId } = req.params;
+  if (!commentId) {
+    throw new BadUserInputError({ commentId });
+  }
+  const comment = await Comment.deleteOne({ _id: commentId });
   res.respond({ comment });
 });

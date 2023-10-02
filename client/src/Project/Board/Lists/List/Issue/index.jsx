@@ -17,13 +17,13 @@ const propTypes = {
 const ProjectBoardListIssue = ({ projectUsers, issue, index }) => {
   const match = useRouteMatch();
 
-  const assignees = issue.userIds.map(userId => projectUsers.find(user => user._id === userId));
+  const assignees = issue.users.map(userId => projectUsers.find(user => user._id === userId)).filter(Boolean) || [];
 
   return (
-    <Draggable draggableId={issue.id.toString()} index={index}>
+    <Draggable draggableId={issue._id.toString()} index={index}>
       {(provided, snapshot) => (
         <IssueLink
-          to={`${match.url}/issues/${issue.id}`}
+          to={`${match.url}/issues/${issue._id}`}
           ref={provided.innerRef}
           data-testid="list-issue"
           {...provided.draggableProps}
