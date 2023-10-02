@@ -23,6 +23,8 @@ const Project = () => {
 
   const [{ data, error, setLocalData }, fetchProject] = useApi.get('/project');
 
+  console.log(data, 'datas');
+
   if (!data) return <PageLoader />;
   if (error) return <PageError />;
 

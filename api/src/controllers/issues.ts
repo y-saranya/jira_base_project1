@@ -1,27 +1,30 @@
-import { Issue } from 'entities';
+import { IIssue, Issue } from 'mongooseEntities';
+import { Issue as EnIssue } from 'entities';
 import { catchErrors } from 'errors';
 import { updateEntity, deleteEntity, createEntity, findEntityOrThrow } from 'utils/typeorm';
 
 export const getProjectIssues = catchErrors(async (req, res) => {
-  const { projectId } = req.currentUser;
-  const { searchTerm } = req.query;
+  const { _id } = req.currentUser;
+  // const { searchTerm } = req.query;
 
-  let whereSQL = 'issue.projectId = :projectId';
+  // let whereSQL = 'issue._id = :_id';
 
-  if (searchTerm) {
-    whereSQL += ' AND (issue.title ILIKE :searchTerm OR issue.descriptionText ILIKE :searchTerm)';
-  }
+  // if (searchTerm) {
+  //   whereSQL += ' AND (issue.title ILIKE :searchTerm OR issue.descriptionText ILIKE :searchTerm)';
+  // }
 
-  const issues = await Issue.createQueryBuilder('issue')
-    .select()
-    .where(whereSQL, { projectId, searchTerm: `%${searchTerm}%` })
-    .getMany();
+  // const issues = await Issue.createQueryBuilder('issue')
+  //   .select()
+  //   .where(whereSQL, { _id, searchTerm: `%${searchTerm}%` })
+  //   .getMany();
+
+  const issues = await Issue.find({ users: _id });
 
   res.respond({ issues });
 });
 
 export const getIssueWithUsersAndComments = catchErrors(async (req, res) => {
-  const issue = await findEntityOrThrow(Issue, req.params.issueId, {
+  const issue = await findEntityOrThrow(EnIssue, req.params.issueId, {
     relations: ['users', 'comments', 'comments.user'],
   });
   res.respond({ issue });
@@ -29,22 +32,22 @@ export const getIssueWithUsersAndComments = catchErrors(async (req, res) => {
 
 export const create = catchErrors(async (req, res) => {
   const listPosition = await calculateListPosition(req.body);
-  const issue = await createEntity(Issue, { ...req.body, listPosition });
+  const issue = await createEntity(EnIssue, { ...req.body, listPosition });
   res.respond({ issue });
 });
 
 export const update = catchErrors(async (req, res) => {
-  const issue = await updateEntity(Issue, req.params.issueId, req.body);
+  const issue = await updateEntity(EnIssue, req.params.issueId, req.body);
   res.respond({ issue });
 });
 
 export const remove = catchErrors(async (req, res) => {
-  const issue = await deleteEntity(Issue, req.params.issueId);
+  const issue = await deleteEntity(EnIssue, req.params.issueId);
   res.respond({ issue });
 });
 
-const calculateListPosition = async ({ projectId, status }: Issue): Promise<number> => {
-  const issues = await Issue.find({ projectId, status });
+const calculateListPosition = async ({ _id, status }: IIssue): Promise<number> => {
+  const issues = await Issue.find({ _id, status });
 
   const listPositions = issues.map(({ listPosition }) => listPosition);
 

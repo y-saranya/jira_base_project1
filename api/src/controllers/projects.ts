@@ -1,21 +1,20 @@
-import { Project } from 'entities';
+import { Project as EnProject } from 'entities';
+import { Project } from 'mongooseEntities';
 import { catchErrors } from 'errors';
-import { findEntityOrThrow, updateEntity } from 'utils/typeorm';
-import { issuePartial } from 'serializers/issues';
+import { updateEntity } from 'utils/typeorm';
 
-export const getProjectWithUsersAndIssues = catchErrors(async (req, res) => {
-  const project = await findEntityOrThrow(Project, req.currentUser.projectId, {
-    relations: ['users', 'issues'],
-  });
+export const getProjectWithUsersAndIssues = catchErrors(async (_, res) => {
+  const project = await Project.find()
+    .populate('users')
+    .populate('issues');
+  console.log(project, 'project');
   res.respond({
-    project: {
-      ...project,
-      issues: project.issues.map(issuePartial),
-    },
+    project: project[0],
   });
 });
 
 export const update = catchErrors(async (req, res) => {
-  const project = await updateEntity(Project, req.currentUser.projectId, req.body);
+  // eslint-disable-next-line no-underscore-dangle
+  const project = await updateEntity(EnProject, req.currentUser._id, req.body);
   res.respond({ project });
 });

@@ -11,10 +11,11 @@ const entities: { [key: string]: EntityConstructor } = { Comment, Issue, Project
 
 export const findEntityOrThrow = async <T extends EntityConstructor>(
   Constructor: T,
-  id: number | string,
-  options?: FindOneOptions,
+  id: string | number,
+  options: FindOneOptions,
 ): Promise<InstanceType<T>> => {
-  const instance = await Constructor.findOne(id, options);
+  console.log(id);
+  const instance = await Constructor.findOne(options);
   if (!instance) {
     throw new EntityNotFoundError(Constructor.name);
   }
@@ -38,7 +39,8 @@ export const createEntity = async <T extends EntityConstructor>(
   Constructor: T,
   input: Partial<InstanceType<T>>,
 ): Promise<InstanceType<T>> => {
-  const instance = Constructor.create(input);
+  console.log(input, Constructor);
+  const instance = 'Constructor.create(input)';
   return validateAndSaveEntity(instance as InstanceType<T>);
 };
 
@@ -47,7 +49,8 @@ export const updateEntity = async <T extends EntityConstructor>(
   id: number | string,
   input: Partial<InstanceType<T>>,
 ): Promise<InstanceType<T>> => {
-  const instance = await findEntityOrThrow(Constructor, id);
+  console.log(id);
+  const instance = await findEntityOrThrow(Constructor, id, {});
   Object.assign(instance, input);
   return validateAndSaveEntity(instance);
 };
@@ -56,7 +59,8 @@ export const deleteEntity = async <T extends EntityConstructor>(
   Constructor: T,
   id: number | string,
 ): Promise<InstanceType<T>> => {
-  const instance = await findEntityOrThrow(Constructor, id);
+  console.log(id);
+  const instance = await findEntityOrThrow(Constructor, id, {});
   await instance.remove();
   return instance;
 };
