@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -57,8 +58,8 @@ const ProjectIssueCreate = ({ project, fetchProject, onCreate, modalClose }) => 
           await createIssue({
             ...values,
             status: IssueStatus.BACKLOG,
-            projectId: project.id,
-            users: values.userIds.map(id => ({ id })),
+            project: project._id,
+            users: values.userIds.map(_id => ({ _id })),
           });
           await fetchProject();
           toast.success('Issue has been successfully created.');
@@ -136,7 +137,7 @@ const priorityOptions = Object.values(IssuePriority).map(priority => ({
   label: IssuePriorityCopy[priority],
 }));
 
-const userOptions = project => project.users.map(user => ({ value: user.id, label: user.name }));
+const userOptions = project => project.users.map(user => ({ value: user._id, label: user.name }));
 
 const renderType = ({ value: type }) => (
   <SelectItem>
@@ -153,11 +154,11 @@ const renderPriority = ({ value: priority }) => (
 );
 
 const renderUser = project => ({ value: userId, removeOptionValue }) => {
-  const user = project.users.find(({ id }) => id === userId);
+  const user = project.users.find(({ _id }) => _id === userId);
 
   return (
     <SelectItem
-      key={user.id}
+      key={user._id}
       withBottomMargin={!!removeOptionValue}
       onClick={() => removeOptionValue && removeOptionValue()}
     >

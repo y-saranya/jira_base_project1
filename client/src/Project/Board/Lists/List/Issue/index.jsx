@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useRouteMatch } from 'react-router-dom';
@@ -16,7 +17,7 @@ const propTypes = {
 const ProjectBoardListIssue = ({ projectUsers, issue, index }) => {
   const match = useRouteMatch();
 
-  const assignees = issue.userIds.map(userId => projectUsers.find(user => user.id === userId));
+  const assignees = issue.userIds.map(userId => projectUsers.find(user => user._id === userId));
 
   return (
     <Draggable draggableId={issue.id.toString()} index={index}>
@@ -38,7 +39,7 @@ const ProjectBoardListIssue = ({ projectUsers, issue, index }) => {
               <Assignees>
                 {assignees.map(user => (
                   <AssigneeAvatar
-                    key={user.id}
+                    key={user._id}
                     size={24}
                     avatarUrl={user.avatarUrl}
                     name={user.name}

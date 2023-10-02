@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -14,7 +15,7 @@ const propTypes = {
 };
 
 const ProjectSettings = ({ project, fetchProject }) => {
-  const [{ isUpdating }, updateProject] = useApi.put('/project');
+  const [{ isUpdating }, updateProject] = useApi.put(`/project/${project._id}`);
 
   return (
     <Form

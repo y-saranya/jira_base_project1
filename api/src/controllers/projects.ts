@@ -1,20 +1,24 @@
-import { Project as EnProject } from 'entities';
 import { Project } from 'mongooseEntities';
-import { catchErrors } from 'errors';
-import { updateEntity } from 'utils/typeorm';
+import { BadUserInputError, EntityNotFoundError, catchErrors } from 'errors';
 
 export const getProjectWithUsersAndIssues = catchErrors(async (_, res) => {
-  const project = await Project.find()
+  const project = await Project.findOne()
     .populate('users')
     .populate('issues');
-  console.log(project, 'project');
+
   res.respond({
-    project: project[0],
+    project,
   });
 });
 
 export const update = catchErrors(async (req, res) => {
-  // eslint-disable-next-line no-underscore-dangle
-  const project = await updateEntity(EnProject, req.currentUser._id, req.body);
+  const { projectId } = req.params;
+  if (!projectId) {
+    throw new BadUserInputError({ projectId });
+  }
+  const project = await Project.updateOne({ _id: projectId }, req.body);
+  if (!project) {
+    throw new EntityNotFoundError(Project.name);
+  }
   res.respond({ project });
 });

@@ -1,7 +1,7 @@
 import { IIssue, Issue } from 'mongooseEntities';
 import { Issue as EnIssue } from 'entities';
 import { catchErrors } from 'errors';
-import { updateEntity, deleteEntity, createEntity, findEntityOrThrow } from 'utils/typeorm';
+import { updateEntity, deleteEntity, findEntityOrThrow } from 'utils/typeorm';
 
 export const getProjectIssues = catchErrors(async (req, res) => {
   const { _id } = req.currentUser;
@@ -32,7 +32,12 @@ export const getIssueWithUsersAndComments = catchErrors(async (req, res) => {
 
 export const create = catchErrors(async (req, res) => {
   const listPosition = await calculateListPosition(req.body);
-  const issue = await createEntity(EnIssue, { ...req.body, listPosition });
+  console.log(listPosition, 'listPositions');
+  // const issue = await createEntity(EnIssue, { ...req.body, listPosition });
+  console.log(req.currentUser, 'projectId');
+  const issue = new Issue({ ...req.body, listPosition });
+  await issue.save();
+  console.log(issue, 'issue');
   res.respond({ issue });
 });
 

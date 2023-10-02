@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { catchErrors } from 'errors';
 import { signToken } from 'utils/authToken';
 import createAccount from 'database/createGuestAccount';
@@ -5,6 +6,6 @@ import createAccount from 'database/createGuestAccount';
 export const createGuestAccount = catchErrors(async (_req, res) => {
   const user = await createAccount();
   res.respond({
-    authToken: signToken({ sub: user.id }),
+    authToken: signToken({ sub: user._id }),
   });
 });

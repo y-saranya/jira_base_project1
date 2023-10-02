@@ -7,7 +7,7 @@ const useCurrentUser = ({ cachePolicy = 'cache-only' } = {}) => {
 
   return {
     currentUser: get(data, 'currentUser'),
-    currentUserId: get(data, 'currentUser.id'),
+    currentUserId: get(data, 'currentUser._id'),
   };
 };
 

@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 
@@ -24,7 +25,7 @@ const ProjectBoardIssueDetailsCommentsCreate = ({ issueId, fetchIssue }) => {
   const handleCommentCreate = async () => {
     try {
       setCreating(true);
-      await api.post(`/comments`, { body, issueId, userId: currentUser.id });
+      await api.post(`/comments`, { body, issueId, userId: currentUser._id });
       await fetchIssue();
       setFormOpen(false);
       setCreating(false);
