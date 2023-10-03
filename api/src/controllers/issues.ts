@@ -15,7 +15,7 @@ export const getIssueWithUsersAndComments = catchErrors(async (req, res) => {
   const issue = await Issue.findOne({ _id: issueId }).populate('users');
 
   if (issue) {
-    issue.comments = await Comment.find({ issue: issueId });
+    issue.comments = await Comment.find({ issue: issueId }).populate('user');
   }
   res.respond({ issue });
 });

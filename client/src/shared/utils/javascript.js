@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export const moveItemWithinArray = (arr, item, newIndex) => {
   const arrClone = [...arr];
   const oldIndex = arrClone.indexOf(item);
@@ -22,4 +24,4 @@ export const updateArrayItemById = (arr, itemId, fields) => {
 };
 
 export const sortByNewest = (items, sortField) =>
-  items.sort((a, b) => -a[sortField].localeCompare(b[sortField]));
+  items.sort((a, b) => moment(a[sortField]).diff(moment(b[sortField])));

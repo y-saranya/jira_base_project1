@@ -25,8 +25,6 @@ const ProjectBoardLists = ({ project, filters, updateLocalProjectIssues }) => {
 
     const issueId = draggableId;
 
-    console.log(source, draggableId, destination, "destination")
-
     api.optimisticUpdate(`/issues/${issueId}`, {
       updatedFields: {
         status: destination.droppableId,

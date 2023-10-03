@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
 
 import { Icon, AboutTooltip } from 'shared/components';
+import { removeStoredAuthToken } from 'shared/utils/authToken';
 
 import { NavLeft, LogoLink, StyledLogo, Bottom, Item, ItemText } from './Styles';
 
@@ -10,8 +12,10 @@ const propTypes = {
   issueCreateModalOpen: PropTypes.func.isRequired,
 };
 
-const ProjectNavbarLeft = ({ issueSearchModalOpen, issueCreateModalOpen }) => (
-  <NavLeft>
+const ProjectNavbarLeft = ({ issueSearchModalOpen, issueCreateModalOpen }) => {
+  const history = useHistory();
+  return (
+    <NavLeft>
     <LogoLink to="/">
       <StyledLogo color="#fff" />
     </LogoLink>
@@ -24,6 +28,14 @@ const ProjectNavbarLeft = ({ issueSearchModalOpen, issueCreateModalOpen }) => (
     <Item onClick={issueCreateModalOpen}>
       <Icon type="plus" size={27} />
       <ItemText>Create Issue</ItemText>
+    </Item>
+
+    <Item onClick={() => {
+      removeStoredAuthToken();
+      history.push('/');
+    }}>
+      <Icon type="close" size={27} />
+      <ItemText>LogOut</ItemText>
     </Item>
 
     <Bottom>
@@ -39,7 +51,8 @@ const ProjectNavbarLeft = ({ issueSearchModalOpen, issueCreateModalOpen }) => (
       />
     </Bottom>
   </NavLeft>
-);
+  )
+};
 
 ProjectNavbarLeft.propTypes = propTypes;
 

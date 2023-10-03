@@ -10,7 +10,8 @@ export const attachPublicRoutes = (app: any): void => {
     app.delete('/test/reset-database', test.resetDatabase);
     app.post('/test/create-account', test.createAccount);
   }
-
+  app.post('/user/create', users.create);
+  app.post('/user/login', users.login);
   app.post('/authentication/guest', authentication.createGuestAccount);
 };
 
@@ -26,6 +27,7 @@ export const attachPrivateRoutes = (app: any): void => {
   app.delete('/issues/:issueId', issues.remove);
 
   app.get('/project', projects.getProjectWithUsersAndIssues);
+  app.post('/project', projects.create);
   app.put('/project/:projectId', projects.update);
 
   app.get('/currentUser', users.getCurrentUser);

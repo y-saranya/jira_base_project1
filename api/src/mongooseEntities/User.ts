@@ -22,6 +22,7 @@ const UserSchema: Schema = new Schema({
     type: String,
     required: true,
     maxlength: 200,
+    unique: true,
     // You can add custom validation for email if needed
   },
   avatarUrl: {
