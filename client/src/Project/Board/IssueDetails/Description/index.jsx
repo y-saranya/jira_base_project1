@@ -46,7 +46,11 @@ const ProjectBoardIssueDetailsDescription = ({ issue, updateIssue }) => {
           {isDescriptionEmpty ? (
             <EmptyLabel onClick={() => setEditing(true)}>Add a description...</EmptyLabel>
           ) : (
-            <TextEditedContent content={description} onClick={() => setEditing(true)} />
+            <TextEditedContent content={description} onClick={(event) => {
+              if (event.target.tagName !== 'A') {
+                setEditing(true)
+              }
+            }} />
           )}
         </Fragment>
       )}

@@ -3,12 +3,13 @@ import PropTypes from 'prop-types';
 import { Route, useRouteMatch, useHistory } from 'react-router-dom';
 
 import useMergeState from 'shared/hooks/mergeState';
-import { Breadcrumbs, Modal } from 'shared/components';
+import { Avatar, Breadcrumbs, Modal } from 'shared/components';
 
 import Header from './Header';
 import Filters from './Filters';
 import Lists from './Lists';
 import IssueDetails from './IssueDetails';
+import useCurrentUser from 'shared/hooks/currentUser';
 
 const propTypes = {
   project: PropTypes.object.isRequired,
@@ -26,12 +27,19 @@ const defaultFilters = {
 const ProjectBoard = ({ project, fetchProject, updateLocalProjectIssues }) => {
   const match = useRouteMatch();
   const history = useHistory();
+  const { currentUser } = useCurrentUser();
 
   const [filters, mergeFilters] = useMergeState(defaultFilters);
 
   return (
     <Fragment>
-      <Breadcrumbs items={['Projects', project.name, 'Kanban Board']} />
+      {/* // user avatar with breadcrumbs */}
+      <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+        <Breadcrumbs items={['Projects', project.name, 'Kanban Board']} />
+        <div>
+          {currentUser && <Avatar name={currentUser.name} avatarUrl={currentUser.avatarUrl} />}
+        </div>
+      </div>
       <Header />
       <Filters
         projectUsers={project.users}

@@ -9,40 +9,28 @@ export interface IComment extends Document {
   issue: mongoose.Types.ObjectId;
 }
 
-const CommentSchema: Schema = new Schema({
-  body: {
-    type: String,
-    required: true,
-    maxlength: 50000,
+const CommentSchema: Schema = new Schema(
+  {
+    body: {
+      type: String,
+      required: true,
+      maxlength: 50000,
+    },
+    user: {
+      type: mongoose.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
+    issue: {
+      type: mongoose.Types.ObjectId,
+      ref: 'Issue',
+      required: true,
+    },
   },
-  createdAt: {
-    type: Date,
-    default: Date.now(),
+  {
+    timestamps: true,
   },
-  updatedAt: {
-    type: Date,
-    default: Date.now(),
-  },
-  user: {
-    type: mongoose.Types.ObjectId,
-    ref: 'User',
-    required: true,
-  },
-  issue: {
-    type: mongoose.Types.ObjectId,
-    ref: 'Issue',
-    required: true,
-  },
-});
-
-// If you want to automatically update the `updatedAt` field on save, you can use a pre-save hook:
-// eslint-disable-next-line func-names
-CommentSchema.pre<IComment>('save', function(next) {
-  if (this.isModified('body')) {
-    this.updatedAt = new Date();
-  }
-  next();
-});
+);
 
 const Comment = mongoose.model<IComment>('Comment', CommentSchema);
 

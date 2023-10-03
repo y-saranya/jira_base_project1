@@ -14,46 +14,37 @@ export interface IProject extends Document {
   users: mongoose.Types.ObjectId[];
 }
 
-const ProjectSchema: Schema = new Schema({
-  name: {
-    type: String,
-    required: true,
-    maxlength: 100,
-  },
-  url: String,
-  description: String,
-  category: {
-    type: String,
-    enum: Object.values(ProjectCategory),
-    required: true,
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now(),
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now(),
-  },
-  issues: [
-    {
-      type: mongoose.Types.ObjectId,
-      ref: 'Issue',
+const ProjectSchema: Schema = new Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      maxlength: 100,
     },
-  ],
-  users: [
-    {
-      type: mongoose.Types.ObjectId,
-      ref: 'User',
+    url: String,
+    description: String,
+    category: {
+      type: String,
+      enum: Object.values(ProjectCategory),
+      required: true,
     },
-  ],
-});
-
-// Automatically update the `updatedAt` field on save
-ProjectSchema.pre<IProject>('save', function(next) {
-  this.updatedAt = new Date();
-  next();
-});
+    issues: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: 'Issue',
+      },
+    ],
+    users: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
+  },
+  {
+    timestamps: true,
+  },
+);
 
 const Project = mongoose.model<IProject>('Project', ProjectSchema);
 

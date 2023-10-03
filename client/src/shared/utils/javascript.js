@@ -23,5 +23,7 @@ export const updateArrayItemById = (arr, itemId, fields) => {
   return arrClone;
 };
 
-export const sortByNewest = (items, sortField) =>
-  items.sort((a, b) => moment(a[sortField]).diff(moment(b[sortField])));
+export const sortByNewest = (items, sortField) => {
+  return items.sort((a, b) => moment(b[sortField]).valueOf() - moment(a[sortField]).valueOf())
+}
+  ;

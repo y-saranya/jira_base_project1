@@ -23,71 +23,67 @@ export interface IIssue extends Document {
   users: mongoose.Types.ObjectId[];
 }
 
-const IssueSchema: Schema = new Schema({
-  title: {
-    type: String,
-    required: true,
-    maxlength: 200,
-  },
-  type: {
-    type: String,
-    enum: Object.values(IssueType),
-    required: true,
-  },
-  status: {
-    type: String,
-    enum: Object.values(IssueStatus),
-    required: true,
-  },
-  priority: {
-    type: String,
-    enum: Object.values(IssuePriority),
-    required: true,
-  },
-  listPosition: {
-    type: Number,
-    required: true,
-  },
-  description: String,
-  descriptionText: String,
-  estimate: Number,
-  timeSpent: Number,
-  timeRemaining: Number,
-  createdAt: {
-    type: Date,
-    default: Date.now(),
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now(),
-  },
-  reporterId: {
-    type: mongoose.Types.ObjectId,
-    required: true,
-  },
-  project: {
-    type: mongoose.Types.ObjectId,
-    ref: 'Project',
-    required: true,
-  },
-  comments: [
-    {
-      type: mongoose.Types.ObjectId,
-      ref: 'Comment',
+const IssueSchema: Schema = new Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+      maxlength: 200,
     },
-  ],
-  users: [
-    {
-      type: mongoose.Types.ObjectId,
-      ref: 'User',
+    type: {
+      type: String,
+      enum: Object.values(IssueType),
+      required: true,
     },
-  ],
-});
+    status: {
+      type: String,
+      enum: Object.values(IssueStatus),
+      required: true,
+    },
+    priority: {
+      type: String,
+      enum: Object.values(IssuePriority),
+      required: true,
+    },
+    listPosition: {
+      type: Number,
+      required: true,
+    },
+    description: String,
+    descriptionText: String,
+    estimate: Number,
+    timeSpent: Number,
+    timeRemaining: Number,
+    reporterId: {
+      type: mongoose.Types.ObjectId,
+      required: true,
+    },
+    project: {
+      type: mongoose.Types.ObjectId,
+      ref: 'Project',
+      required: true,
+    },
+    comments: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: 'Comment',
+      },
+    ],
+    users: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
+  },
+  {
+    timestamps: true,
+  },
+);
 
 // Automatically update the `updatedAt` field on save
 // eslint-disable-next-line func-names
 IssueSchema.pre<IIssue>('save', function(next) {
-  this.updatedAt = new Date();
   if (this.description) {
     this.descriptionText = striptags(this.description);
   }
