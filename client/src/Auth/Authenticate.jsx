@@ -24,58 +24,14 @@ const Authenticate = () => {
 
   if (!isLoggedIn) return (
     <React.Fragment>
-      <Form
-      initialValues={{
-        name: '',
-        email: '',
-        avatarUrl: ''
-      }}
-      validations={{
-        name: [Form.is.required(), Form.is.minLength(3)],
-        email: [Form.is.required(), Form.is.email()],
-        avatarUrl: Form.is.url(),
-      }}
-      onSubmit={async (values, form) => {
-        try {
-          await createUser({
-            ...values
-          })
-          toast.success(`User ${values.name} created sucessfully`);
-        } catch (error) {
-          Form.handleAPIError(error, form);
-        }
-      }}
-     >
-      <FormElement>
-        <FormHeading>Create User</FormHeading>
-        <Form.Field.Input 
-          name="name"
-          label="Enter Name"
-          placeholder="Please Enter Your Name"
-        />
-        <Form.Field.Input 
-          name="email"
-          label="Enter Email"
-          placeholder="Please Enter Your Email"
-        />
-        <Form.Field.Input 
-          name="avatarUrl"
-          label="Enter avatarUrl"
-          placeholder="Please Enter Your avatarUrl"
-        />
-        <Actions>
-          <ActionButton type="submit" variant="primary" isWorking={isCreating}>
-            Create User
-          </ActionButton>
-        </Actions>
-      </FormElement>
-     </Form>
      <Form
       initialValues={{
         email: '',
+        password: ''
       }}
       validations={{
         email: [Form.is.required(), Form.is.email()],
+        password: [Form.is.required()]
       }}
       onSubmit={async (values, form) => {
         try {
@@ -96,6 +52,12 @@ const Authenticate = () => {
           name="email"
           label="Enter Email"
           placeholder="Please Enter Your Email"
+        />
+        <Form.Field.Input 
+          name="password"
+          label="Enter Password"
+          placeholder="Please Enter Your Password"
+          type="password"
         />
         <Actions>
           <ActionButton type="submit" variant="primary" isWorking={isLoggingIn}>

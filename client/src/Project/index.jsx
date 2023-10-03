@@ -15,6 +15,7 @@ import IssueSearch from './IssueSearch';
 import IssueCreate from './IssueCreate';
 import ProjectSettings from './ProjectSettings';
 import { ProjectPage } from './Styles';
+import UserCreate from 'Project/UserCreate';
 
 const Project = () => {
   const match = useRouteMatch();
@@ -22,6 +23,7 @@ const Project = () => {
 
   const issueSearchModalHelpers = createQueryParamModalHelpers('issue-search');
   const issueCreateModalHelpers = createQueryParamModalHelpers('issue-create');
+  const userCreateModalHelpers = createQueryParamModalHelpers('user-create');
 
   const [{ data, error, setLocalData }, fetchProject] = useApi.get('/project');
   const [_, createProject] = useApi.post('/project')
@@ -97,9 +99,29 @@ const Project = () => {
   return (
     <ProjectPage>
       <NavbarLeft
+        project={project}
         issueSearchModalOpen={issueSearchModalHelpers.open}
         issueCreateModalOpen={issueCreateModalHelpers.open}
+        userCreateModalOpen={userCreateModalHelpers.open}
       />
+
+      {userCreateModalHelpers.isOpen() && (
+          <Modal
+            isOpen
+            testid="modal:user-create"
+            width={800}
+            withCloseIcon={false}
+            onClose={userCreateModalHelpers.close}
+            renderContent={modal => (
+              <UserCreate
+                project={project}
+                fetchProject={fetchProject}
+                onCreate={() => history.push(`${match.url}/board`)}
+                modalClose={modal.close}
+              />
+            )}
+        />
+      )}
 
       {!project ? (
         <div style={{flex: 1, display: 'flex', flexDirection: 'column'}}>

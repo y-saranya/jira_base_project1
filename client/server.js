@@ -10,4 +10,6 @@ app.use(express.static(`${__dirname}/build`));
 
 app.use(fallback(`${__dirname}/build/index.html`));
 
-app.listen(process.env.PORT || 8081);
+app.listen(process.env.PORT || 8081, () => {
+    console.log("listening on port", process.env.PORT || 8081)
+});

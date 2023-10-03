@@ -4,31 +4,46 @@ import { useHistory } from 'react-router-dom';
 
 import { Icon, AboutTooltip } from 'shared/components';
 import { removeStoredAuthToken } from 'shared/utils/authToken';
+import useCurrentUser from 'shared/hooks/currentUser';
 
 import { NavLeft, LogoLink, StyledLogo, Bottom, Item, ItemText } from './Styles';
 
 const propTypes = {
   issueSearchModalOpen: PropTypes.func.isRequired,
   issueCreateModalOpen: PropTypes.func.isRequired,
+  userCreateModalOpen: PropTypes.func.isRequired,
 };
 
-const ProjectNavbarLeft = ({ issueSearchModalOpen, issueCreateModalOpen }) => {
+const ProjectNavbarLeft = ({ project, issueSearchModalOpen, issueCreateModalOpen, userCreateModalOpen }) => {
   const history = useHistory();
+  const { currentUser } = useCurrentUser();
+
   return (
     <NavLeft>
     <LogoLink to="/">
       <StyledLogo color="#fff" />
     </LogoLink>
 
-    <Item onClick={issueSearchModalOpen}>
-      <Icon type="search" size={22} top={1} left={3} />
-      <ItemText>Search issues</ItemText>
-    </Item>
+    {project && (
+      <Item onClick={issueSearchModalOpen}>
+        <Icon type="search" size={22} top={1} left={3} />
+        <ItemText>Search issues</ItemText>
+      </Item>
+    )}
 
-    <Item onClick={issueCreateModalOpen}>
-      <Icon type="plus" size={27} />
-      <ItemText>Create Issue</ItemText>
-    </Item>
+    {currentUser && currentUser.isAdmin && project && (
+      <Item onClick={issueCreateModalOpen}>
+        <Icon type="plus" size={27} />
+        <ItemText>Create Issue</ItemText>
+      </Item>
+    )}
+
+    {currentUser && currentUser.isAdmin && (
+      <Item onClick={userCreateModalOpen}>
+        <Icon type="plus" size={27} />
+        <ItemText>Create User</ItemText>
+      </Item>
+    )}
 
     <Item onClick={() => {
       removeStoredAuthToken();

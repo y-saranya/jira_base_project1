@@ -5,6 +5,8 @@ export interface IUser extends Document {
   name: string;
   email: string;
   avatarUrl: string;
+  isAdmin: boolean;
+  password: string;
   createdAt: Date;
   updatedAt: Date;
   comments: mongoose.Types.ObjectId[];
@@ -24,6 +26,15 @@ const UserSchema: Schema = new Schema({
     maxlength: 200,
     unique: true,
     // You can add custom validation for email if needed
+  },
+  isAdmin: {
+    type: Boolean,
+    default: false,
+    // You can add custom validation for email if needed
+  },
+  password: {
+    type: String,
+    required: true,
   },
   avatarUrl: {
     type: String,
