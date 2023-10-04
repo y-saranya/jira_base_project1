@@ -14,6 +14,23 @@ const checkPassword = async (password: string, hash: string): Promise<boolean> =
   return match;
 };
 
+export const getAllUsers = catchErrors(async (req, res) => {
+  let users = await User.find({}, '-password');
+  if (req.query.projectId) {
+    users = users.filter(user => user.project === req.query.projectId);
+  }
+  res.respond(users);
+});
+
+export const deleteUser = catchErrors(async (req, res) => {
+  const { userId } = req.params;
+  if (!userId) {
+    throw new CustomError('Please Provide User Id');
+  }
+  const success = await User.deleteOne({ _id: userId });
+  res.respond(success);
+});
+
 export const create = catchErrors(async (req, res) => {
   const { email } = req.body;
   if (!email) {

@@ -7,6 +7,9 @@ import { createQueryParamModalHelpers } from 'shared/utils/queryParamModal';
 import { PageLoader, PageError, Modal } from 'shared/components';
 import { ActionButton } from 'Project/ProjectSettings/Styles';
 import toast from 'shared/utils/toast';
+import useCurrentUser from 'shared/hooks/currentUser';
+import UserCreate from 'Project/UserCreate';
+import Users from 'Project/Users';
 
 import NavbarLeft from './NavbarLeft';
 import Sidebar from './Sidebar';
@@ -15,11 +18,12 @@ import IssueSearch from './IssueSearch';
 import IssueCreate from './IssueCreate';
 import ProjectSettings from './ProjectSettings';
 import { ProjectPage } from './Styles';
-import UserCreate from 'Project/UserCreate';
+
 
 const Project = () => {
   const match = useRouteMatch();
   const history = useHistory();
+  const { currentUser } = useCurrentUser();
 
   const issueSearchModalHelpers = createQueryParamModalHelpers('issue-search');
   const issueCreateModalHelpers = createQueryParamModalHelpers('issue-create');
@@ -87,6 +91,15 @@ const Project = () => {
             />
           )}
         />
+        
+        {currentUser && currentUser.isAdmin && (
+          <Route
+            path={`${match.path}/users`}
+            render={() => (
+              <Users />
+            )}
+          />
+        )}
 
         <Route
           path={`${match.path}/settings`}

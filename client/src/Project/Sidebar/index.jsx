@@ -16,6 +16,7 @@ import {
   LinkText,
   NotImplemented,
 } from './Styles';
+import useCurrentUser from 'shared/hooks/currentUser';
 
 const propTypes = {
   project: PropTypes.object.isRequired,
@@ -23,6 +24,7 @@ const propTypes = {
 
 const ProjectSidebar = ({ project }) => {
   const match = useRouteMatch();
+  const { currentUser } = useCurrentUser();
 
   return (
     <Sidebar>
@@ -35,6 +37,7 @@ const ProjectSidebar = ({ project }) => {
       </ProjectInfo>
 
       {renderLinkItem(match, 'Kanban Board', 'board', '/board')}
+      {currentUser && currentUser.isAdmin && renderLinkItem(match, 'Users', 'user', '/users')}
       {renderLinkItem(match, 'Project settings', 'settings', '/settings')}
       <Divider />
       {renderLinkItem(match, 'Releases', 'shipping')}

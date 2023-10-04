@@ -5,6 +5,7 @@ import { StyledIcon } from './Styles';
 
 const fontIconCodes = {
   [`bug`]: '\\e90f',
+  [`user`]: '\\1F468',
   [`stopwatch`]: '\\e914',
   [`task`]: '\\e910',
   [`story`]: '\\e911',
