@@ -4,6 +4,7 @@ import { NavLink, useRouteMatch } from 'react-router-dom';
 
 import { ProjectCategoryCopy } from 'shared/constants/projects';
 import { Icon, ProjectAvatar } from 'shared/components';
+import useCurrentUser from 'shared/hooks/currentUser';
 
 import {
   Sidebar,
@@ -16,7 +17,6 @@ import {
   LinkText,
   NotImplemented,
 } from './Styles';
-import useCurrentUser from 'shared/hooks/currentUser';
 
 const propTypes = {
   project: PropTypes.object.isRequired,
@@ -42,7 +42,7 @@ const ProjectSidebar = ({ project }) => {
       <Divider />
       {renderLinkItem(match, 'Releases', 'shipping')}
       {renderLinkItem(match, 'Issues and filters', 'issues')}
-      {renderLinkItem(match, 'Pages', 'page')}
+      {renderLinkItem(match, 'Pages', 'page', '/pages')}
       {renderLinkItem(match, 'Reports', 'reports')}
       {renderLinkItem(match, 'Components', 'component')}
     </Sidebar>

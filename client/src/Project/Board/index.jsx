@@ -5,11 +5,11 @@ import { Route, useRouteMatch, useHistory } from 'react-router-dom';
 import useMergeState from 'shared/hooks/mergeState';
 import { Avatar, Breadcrumbs, Modal } from 'shared/components';
 
+import useCurrentUser from 'shared/hooks/currentUser';
 import Header from './Header';
 import Filters from './Filters';
 import Lists from './Lists';
 import IssueDetails from './IssueDetails';
-import useCurrentUser from 'shared/hooks/currentUser';
 
 const propTypes = {
   project: PropTypes.object.isRequired,

@@ -10,6 +10,7 @@ import toast from 'shared/utils/toast';
 import useCurrentUser from 'shared/hooks/currentUser';
 import UserCreate from 'Project/UserCreate';
 import Users from 'Project/Users';
+import Pages from 'Project/Pages';
 
 import NavbarLeft from './NavbarLeft';
 import Sidebar from './Sidebar';
@@ -100,6 +101,11 @@ const Project = () => {
             )}
           />
         )}
+
+        <Route
+          path={`${match.path}/pages`}
+          render={() => <Pages />}
+        />
 
         <Route
           path={`${match.path}/settings`}
