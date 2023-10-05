@@ -2,13 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 
-import { Icon, AboutTooltip } from 'shared/components';
+import { Icon } from 'shared/components';
 import { removeStoredAuthToken } from 'shared/utils/authToken';
 import useCurrentUser from 'shared/hooks/currentUser';
 
-import { NavLeft, LogoLink, StyledLogo, Bottom, Item, ItemText } from './Styles';
+import { NavLeft, LogoLink, StyledLogo, Item, ItemText } from './Styles';
 
 const propTypes = {
+  project: PropTypes.object.isRequired,
   issueSearchModalOpen: PropTypes.func.isRequired,
   issueCreateModalOpen: PropTypes.func.isRequired,
   userCreateModalOpen: PropTypes.func.isRequired,
@@ -53,18 +54,6 @@ const ProjectNavbarLeft = ({ project, issueSearchModalOpen, issueCreateModalOpen
       <ItemText>LogOut</ItemText>
     </Item>
 
-    <Bottom>
-      <AboutTooltip
-        placement="right"
-        offset={{ top: -218 }}
-        renderLink={linkProps => (
-          <Item {...linkProps}>
-            <Icon type="help" size={25} />
-            <ItemText>About</ItemText>
-          </Item>
-        )}
-      />
-    </Bottom>
   </NavLeft>
   )
 };

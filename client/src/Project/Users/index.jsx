@@ -7,7 +7,7 @@ import useCurrentUser from 'shared/hooks/currentUser';
 import api from 'shared/utils/api';
 import toast from 'shared/utils/toast';
 
-function Users() {
+function Users({ fetchProject }) {
   const [{ data, error }, fetchUsers] = useApi.get('/users');
   const { currentUser } = useCurrentUser();
 
@@ -15,6 +15,7 @@ function Users() {
     try {
       await api.delete(`/users/${user._id}`);
       await fetchUsers();
+      await fetchProject();
       if (modal && modal.close) {
         modal.close();
       }

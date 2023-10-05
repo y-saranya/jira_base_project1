@@ -96,7 +96,7 @@ const Project = () => {
           <Route
             path={`${match.path}/users`}
             render={() => (
-              <Users />
+              <Users fetchProject={fetchProject} />
             )}
           />
         )}

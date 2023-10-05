@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { BadUserInputError, CustomError, catchErrors } from 'errors';
-import { Project, User } from 'mongooseEntities';
+import { Project, User, Comment } from 'mongooseEntities';
 import { signToken } from 'utils/authToken';
 import bcrypt from 'bcrypt';
 
@@ -28,7 +28,11 @@ export const deleteUser = catchErrors(async (req, res) => {
     throw new CustomError('Please Provide User Id');
   }
   const success = await User.deleteOne({ _id: userId });
-  res.respond(success);
+  if (success.acknowledged && success.deletedCount === 1) {
+    await Comment.deleteMany({ user: userId });
+    res.respond(success);
+  }
+  throw new CustomError('Something Went Wrong');
 });
 
 export const create = catchErrors(async (req, res) => {
