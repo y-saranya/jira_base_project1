@@ -61,7 +61,7 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify('production'),
-        API_URL: JSON.stringify('http://vm2-linux.eastus.cloudapp.azure.com/jira_api'),
+        API_URL: JSON.stringify('https://vm2-linux.eastus.cloudapp.azure.com/jira_api'),
       },
     }),
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
