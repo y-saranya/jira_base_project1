@@ -1,3 +1,5 @@
+/* eslint-disable no-restricted-globals */
+/* eslint-disable no-alert */
 /* eslint-disable no-underscore-dangle */
 import { ActionButton } from 'Project/UserCreate/Styles';
 import React from 'react'
@@ -63,20 +65,17 @@ function Users({ fetchProject }) {
               Edit
             </ActionButton>
             {currentUser && currentUser.isAdmin && currentUser._id !== user._id && (
-                <ConfirmModal 
-                  title={`Are you sure you want to delete user ${user.name}?`}
-                  message="Once you delete, it's gone for good."
-                  confirmText={`Delete ${user.name}`}
-                  onConfirm={(modal) => handleDeleteUser(user, modal)}
-                  renderLink={modal => (
-                    <ActionButton
-                      variant='primary'
-                      onClick={modal.open}
-                    >
-                      Delete
-                    </ActionButton>
-                  )}
-                />
+                <ActionButton
+                  variant='danger'
+                  onClick={() => {
+                    const confirmDelete = confirm(`Do You Want to Delete user: ${user.name}`);
+                    if (confirmDelete) {
+                      handleDeleteUser(user);
+                    }
+                  }}
+                >
+                  Delete
+                </ActionButton>
             )}
           </div>
         </div>

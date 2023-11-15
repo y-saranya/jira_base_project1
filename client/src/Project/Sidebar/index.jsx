@@ -38,7 +38,7 @@ const ProjectSidebar = ({ project }) => {
 
       {renderLinkItem(match, 'Kanban Board', 'board', '/board')}
       {currentUser && currentUser.isAdmin && renderLinkItem(match, 'Users', 'user', '/users')}
-      {renderLinkItem(match, 'Project settings', 'settings', '/settings')}
+      {currentUser && currentUser.isAdmin && renderLinkItem(match, 'Project settings', 'settings', '/settings')}
       <Divider />
       {renderLinkItem(match, 'Releases', 'shipping')}
       {renderLinkItem(match, 'Issues and filters', 'issues')}

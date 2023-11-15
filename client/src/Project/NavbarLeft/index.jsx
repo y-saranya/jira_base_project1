@@ -6,6 +6,7 @@ import { Icon } from 'shared/components';
 import { removeStoredAuthToken } from 'shared/utils/authToken';
 import useCurrentUser from 'shared/hooks/currentUser';
 
+import { resetCache } from 'shared/hooks/api/query';
 import { NavLeft, LogoLink, StyledLogo, Item, ItemText } from './Styles';
 
 const propTypes = {
@@ -48,6 +49,7 @@ const ProjectNavbarLeft = ({ project, issueSearchModalOpen, issueCreateModalOpen
 
     <Item onClick={() => {
       removeStoredAuthToken();
+      resetCache();
       history.push('/');
     }}>
       <Icon type="close" size={27} />

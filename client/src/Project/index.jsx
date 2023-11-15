@@ -96,9 +96,7 @@ const Project = () => {
         {currentUser && currentUser.isAdmin && (
           <Route
             path={`${match.path}/users`}
-            render={() => (
-              <Users fetchProject={fetchProject} />
-            )}
+            render={() => <Users fetchProject={fetchProject} />}
           />
         )}
 
