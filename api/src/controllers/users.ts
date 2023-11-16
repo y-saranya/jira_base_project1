@@ -15,7 +15,7 @@ const checkPassword = async (password: string, hash: string): Promise<boolean> =
 };
 
 export const getAllUsers = catchErrors(async (req, res) => {
-  let users = await User.find({}, '-password');
+  let users = await User.find({}, '-password').populate('project');
   if (req.query.projectId) {
     users = users.filter(user => user.project === req.query.projectId);
   }
@@ -45,9 +45,17 @@ export const create = catchErrors(async (req, res) => {
     ...req.body,
     password,
   };
+  const projectName = body.project;
+  if (!projectName) {
+    throw new BadUserInputError({ project: 'Project not provided' });
+  }
+  const project = await Project.findOne({ name: projectName });
+  if (!project) {
+    throw new BadUserInputError({ project: 'project not found' });
+  }
+  body.project = project._id;
   const user = new User(body);
   await user.save();
-  const project = await Project.findOne();
   if (project) {
     project.users.push(user._id);
     await project.save();

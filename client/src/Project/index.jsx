@@ -1,22 +1,21 @@
-import React from 'react';
+/* eslint-disable no-underscore-dangle */
+import React, { useEffect, useState } from 'react';
 import { Route, Redirect, useRouteMatch, useHistory } from 'react-router-dom';
 
 import useApi from 'shared/hooks/api';
 import { updateArrayItemById } from 'shared/utils/javascript';
 import { createQueryParamModalHelpers } from 'shared/utils/queryParamModal';
 import { PageLoader, PageError, Modal } from 'shared/components';
-import { ActionButton } from 'Project/ProjectSettings/Styles';
-import toast from 'shared/utils/toast';
 import useCurrentUser from 'shared/hooks/currentUser';
 import UserCreate from 'Project/UserCreate';
 import Users from 'Project/Users';
 import Pages from 'Project/Pages';
+import ProjectCreate from 'Project/CreateProject';
+import IssueSearch from 'Project/IssueSearch';
 
 import NavbarLeft from './NavbarLeft';
 import Sidebar from './Sidebar';
 import Board from './Board';
-import IssueSearch from './IssueSearch';
-import IssueCreate from './IssueCreate';
 import ProjectSettings from './ProjectSettings';
 import { ProjectPage } from './Styles';
 
@@ -25,102 +24,64 @@ const Project = () => {
   const match = useRouteMatch();
   const history = useHistory();
   const { currentUser } = useCurrentUser();
+  const [currentProject, setCurrentProject] = useState();
 
   const issueSearchModalHelpers = createQueryParamModalHelpers('issue-search');
-  const issueCreateModalHelpers = createQueryParamModalHelpers('issue-create');
   const userCreateModalHelpers = createQueryParamModalHelpers('user-create');
+  const projectCreateModalHelpers = createQueryParamModalHelpers('project-create');
 
-  const [{ data, error, setLocalData }, fetchProject] = useApi.get('/project');
-  const [_, createProject] = useApi.post('/project')
+  const [{ data, error, setLocalData }, fetchProject] = useApi.get('/project/all');
+
+  useEffect(() => {
+    const projects = data && data.projects;
+    if (currentProject) {
+      const findCurrentProject = projects && projects.find(project => currentProject._id === project._id)
+      if (findCurrentProject) {
+        setCurrentProject(findCurrentProject);
+      }
+      return;
+    }
+    const firstProject = projects && projects[0];
+    if (firstProject) {
+      setCurrentProject(firstProject);
+    }
+  }, [currentProject, data])
 
   if (!data) return <PageLoader />;
   if (error) return <PageError />;
 
-  const { project } = data;
+  const { projects } = data;
 
   const updateLocalProjectIssues = (issueId, updatedFields) => {
-    console.log(updatedFields, 'updatedFields')
     setLocalData(currentData => ({
-      project: {
-        ...currentData.project,
-        issues: updateArrayItemById(currentData.project.issues, issueId, updatedFields),
-      },
-    }));
+      projects: [
+        ...currentData.projects.map((project) => ({
+          ...project,
+          issues: updateArrayItemById(project.issues, issueId, updatedFields)
+        }))
+      ]
+    }))
   };
-
-  const getProjectBoard = () => {
-    return (
-      <React.Fragment>
-        <Sidebar project={project} />
-
-        {issueSearchModalHelpers.isOpen() && (
-          <Modal
-            isOpen
-            testid="modal:issue-search"
-            variant="aside"
-            width={600}
-            onClose={issueSearchModalHelpers.close}
-            renderContent={() => <IssueSearch project={project} />}
-          />
-        )}
-
-        {issueCreateModalHelpers.isOpen() && (
-          <Modal
-            isOpen
-            testid="modal:issue-create"
-            width={800}
-            withCloseIcon={false}
-            onClose={issueCreateModalHelpers.close}
-            renderContent={modal => (
-              <IssueCreate
-                project={project}
-                fetchProject={fetchProject}
-                onCreate={() => history.push(`${match.url}/board`)}
-                modalClose={modal.close}
-              />
-            )}
-          />
-        )}
-
-        <Route
-          path={`${match.path}/board`}
-          render={() => (
-            <Board
-              project={project}
-              fetchProject={fetchProject}
-              updateLocalProjectIssues={updateLocalProjectIssues}
-            />
-          )}
-        />
-        
-        {currentUser && currentUser.isAdmin && (
-          <Route
-            path={`${match.path}/users`}
-            render={() => <Users fetchProject={fetchProject} />}
-          />
-        )}
-
-        <Route
-          path={`${match.path}/pages`}
-          render={() => <Pages />}
-        />
-
-        <Route
-          path={`${match.path}/settings`}
-          render={() => <ProjectSettings project={project} fetchProject={fetchProject} />}
-        />
-      </React.Fragment>
-    )
-  }
 
   return (
     <ProjectPage>
       <NavbarLeft
-        project={project}
+        project={currentProject}
         issueSearchModalOpen={issueSearchModalHelpers.open}
-        issueCreateModalOpen={issueCreateModalHelpers.open}
         userCreateModalOpen={userCreateModalHelpers.open}
+        projectCreateModalOpen={projectCreateModalHelpers.open}
       />
+
+      {issueSearchModalHelpers.isOpen() && (
+        <Modal
+          isOpen
+          testid="modal:issue-search"
+          variant="aside"
+          width={600}
+          onClose={issueSearchModalHelpers.close}
+          renderContent={() => <IssueSearch project={currentProject} />}
+        />
+      )}
 
       {userCreateModalHelpers.isOpen() && (
           <Modal
@@ -131,7 +92,8 @@ const Project = () => {
             onClose={userCreateModalHelpers.close}
             renderContent={modal => (
               <UserCreate
-                project={project}
+                projects={projects}
+                project={currentProject}
                 fetchProject={fetchProject}
                 onCreate={() => history.push(`${match.url}/board`)}
                 modalClose={modal.close}
@@ -140,19 +102,55 @@ const Project = () => {
         />
       )}
 
-      {!project ? (
-        <div style={{flex: 1, display: 'flex', flexDirection: 'column'}}>
-          <p>no project created yet</p>
-          <ActionButton onClick={async () => {
-            try {
-              await createProject();
-              fetchProject();
-            } catch (errorCatch) {
-              toast.error(errorCatch.message);
-            }
-          }} variant="primary">Create Project</ActionButton>
-        </div>
-      ) : getProjectBoard()}
+      {projectCreateModalHelpers.isOpen() && (
+          <Modal
+            isOpen
+            testid="modal:project-create"
+            width={800}
+            withCloseIcon={false}
+            onClose={projectCreateModalHelpers.close}
+            renderContent={() => (
+              <ProjectCreate
+                onCreate={() => fetchProject()}
+                modalClose={projectCreateModalHelpers.close}
+              />
+            )}
+        />
+      )}
+
+      <Sidebar currentProject={currentProject} projects={projects} setCurrentProject={setCurrentProject} />
+
+      {currentProject && (
+        <Route
+          path={`${match.path}/board`}
+          render={() => (
+            <Board
+              currentProject={currentProject}
+              fetchProject={fetchProject}
+              updateLocalProjectIssues={updateLocalProjectIssues}
+            />
+          )}
+        />
+      )}
+
+      {currentProject && (
+        <Route
+          path={`${match.path}/settings`}
+          render={() => <ProjectSettings project={currentProject} fetchProject={fetchProject} />}
+        />
+      )}
+
+      {currentUser && currentUser.isAdmin && (
+        <Route
+          path={`${match.path}/users`}
+          render={() => <Users fetchProject={fetchProject} />}
+        />
+      )}
+
+      <Route
+        path={`${match.path}/pages`}
+        render={() => <Pages />}
+      />
 
       {match.isExact && <Redirect to={`${match.url}/board`} />}
     </ProjectPage>

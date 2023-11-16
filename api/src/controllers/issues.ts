@@ -1,9 +1,16 @@
 import { Comment, IIssue, Issue } from 'mongooseEntities';
-import { BadUserInputError, EntityNotFoundError, catchErrors } from 'errors';
+import { BadUserInputError, CustomError, EntityNotFoundError, catchErrors } from 'errors';
 
 export const getProjectIssues = catchErrors(async (req, res) => {
-  const { _id } = req.currentUser;
-  const issues = await Issue.find({ users: _id });
+  const { searchTerm, projectId } = req.query;
+  if (!searchTerm || !projectId) {
+    throw new CustomError('either of one searchTerm or projectId not provided');
+  }
+
+  const issues = await Issue.find({
+    project: projectId,
+    title: { $in: [new RegExp(searchTerm, 'i')] },
+  });
   res.respond({ issues });
 });
 

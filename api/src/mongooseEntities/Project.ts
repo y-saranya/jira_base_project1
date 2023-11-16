@@ -20,6 +20,7 @@ const ProjectSchema: Schema = new Schema(
       type: String,
       required: true,
       maxlength: 100,
+      unique: true,
     },
     url: String,
     description: String,

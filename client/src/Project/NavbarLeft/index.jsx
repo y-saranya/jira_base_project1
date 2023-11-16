@@ -14,9 +14,15 @@ const propTypes = {
   issueSearchModalOpen: PropTypes.func.isRequired,
   issueCreateModalOpen: PropTypes.func.isRequired,
   userCreateModalOpen: PropTypes.func.isRequired,
+  projectCreateModalOpen: PropTypes.func.isRequired,
 };
 
-const ProjectNavbarLeft = ({ project, issueSearchModalOpen, issueCreateModalOpen, userCreateModalOpen }) => {
+const ProjectNavbarLeft = ({ 
+  project, 
+  issueSearchModalOpen, 
+  userCreateModalOpen,
+  projectCreateModalOpen,
+}) => {
   const history = useHistory();
   const { currentUser } = useCurrentUser();
 
@@ -26,17 +32,17 @@ const ProjectNavbarLeft = ({ project, issueSearchModalOpen, issueCreateModalOpen
       <StyledLogo color="#fff" />
     </LogoLink>
 
+    {currentUser && currentUser.isAdmin && (
+      <Item onClick={projectCreateModalOpen}>
+        <Icon type="plus" size={27} />
+        <ItemText>Create Project</ItemText>
+      </Item>
+    )}
+
     {project && (
       <Item onClick={issueSearchModalOpen}>
         <Icon type="search" size={22} top={1} left={3} />
         <ItemText>Search issues</ItemText>
-      </Item>
-    )}
-
-    {currentUser && currentUser.isAdmin && project && (
-      <Item onClick={issueCreateModalOpen}>
-        <Icon type="plus" size={27} />
-        <ItemText>Create Issue</ItemText>
       </Item>
     )}
 

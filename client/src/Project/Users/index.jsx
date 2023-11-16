@@ -40,7 +40,7 @@ function Users({ fetchProject }) {
   return (
     <div>
       {data.map(user => (
-        <div style={{display: 'flex', marginBottom: 10, justifyContent: 'space-between'}}>
+        <div key={user._id} style={{display: 'flex', marginBottom: 10, justifyContent: 'space-between'}}>
           <div style={{display: 'flex'}}>
             <Avatar name={user.name} avatarUrl={user.avatarUrl} />
             <div style={{marginLeft: 10}}>

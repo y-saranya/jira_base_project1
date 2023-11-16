@@ -44,7 +44,7 @@ const ProjectIssueSearch = ({ project }) => {
     setIsSearchTermEmpty(!searchTerm);
 
     if (searchTerm) {
-      fetchIssues({ searchTerm });
+      fetchIssues({ searchTerm, projectId: project._id });
     }
   };
 

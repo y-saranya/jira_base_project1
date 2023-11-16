@@ -5,27 +5,26 @@ import PropTypes from 'prop-types';
 import { ProjectCategory, ProjectCategoryCopy } from 'shared/constants/projects';
 import toast from 'shared/utils/toast';
 import useApi from 'shared/hooks/api';
-import { Form, Breadcrumbs } from 'shared/components';
+import { Form } from 'shared/components';
 
-import { FormCont, FormHeading, FormElement, ActionButton } from './Styles';
+import { FormCont, FormHeading, FormElement, ActionButton, Actions } from './Styles';
 
 const propTypes = {
-  project: PropTypes.object.isRequired,
-  fetchProject: PropTypes.func.isRequired,
+  // fetchProject: PropTypes.func.isRequired,
+  onCreate: PropTypes.func.isRequired,
+  modalClose: PropTypes.func.isRequired,
 };
 
-const ProjectSettings = ({ project, fetchProject }) => {
-  const [{ isUpdating }, updateProject] = useApi.put(`/project/${project._id}`);
+const ProjectCreate = ({ modalClose, onCreate }) => {
+  const [{ isCreating }, createProject] = useApi.post(`/project`);
 
   return (
     <Form
-      enableReinitialize
-      initialValues={Form.initialValues(project, get => ({
-        name: get('name'),
-        url: get('url'),
-        category: get('category'),
-        description: get('description'),
-      }))}
+      initialValues={{
+        name: '',
+        url: '',
+        category: '',
+      }}
       validations={{
         name: [Form.is.required(), Form.is.maxLength(100)],
         url: Form.is.url(),
@@ -33,19 +32,18 @@ const ProjectSettings = ({ project, fetchProject }) => {
       }}
       onSubmit={async (values, form) => {
         try {
-          await updateProject(values);
-          await fetchProject();
+          await createProject(values);
+          modalClose();
           toast.success('Changes have been saved successfully.');
+          onCreate();
         } catch (error) {
           Form.handleAPIError(error, form);
         }
       }}
     >
-      {({initialValues}) => (
-        <FormCont>
+      <FormCont>
         <FormElement>
-          <Breadcrumbs items={['Projects', project.name, 'Project Details']} />
-          <FormHeading>Project Details</FormHeading>
+          <FormHeading>Create Project</FormHeading>
 
           <Form.Field.Input name="name" label="Name" />
           <Form.Field.Input name="url" label="URL" />
@@ -53,17 +51,19 @@ const ProjectSettings = ({ project, fetchProject }) => {
             name="description"
             label="Description"
             tip="Describe the project in as much detail as you'd like."
-            ignoreCacheDefaultvalue
-            defaultValue={initialValues.description}
           />
           <Form.Field.Select name="category" label="Project Category" options={categoryOptions} />
 
-          <ActionButton type="submit" variant="primary" isWorking={isUpdating}>
-            Save changes
-          </ActionButton>
+          <Actions>
+            <ActionButton type="submit" variant="primary" isWorking={isCreating} >
+              Create
+            </ActionButton>
+            <ActionButton type="submit" variant="empty" onClick={modalClose}>
+              Cancel
+            </ActionButton>
+          </Actions>
         </FormElement>
       </FormCont>
-      )}
     </Form>
   );
 };
@@ -73,6 +73,6 @@ const categoryOptions = Object.values(ProjectCategory).map(category => ({
   label: ProjectCategoryCopy[category],
 }));
 
-ProjectSettings.propTypes = propTypes;
+ProjectCreate.propTypes = propTypes;
 
-export default ProjectSettings;
+export default ProjectCreate;

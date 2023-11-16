@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-underscore-dangle */
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -16,6 +17,8 @@ import {
 } from './Styles';
 
 const propTypes = {
+  projects: PropTypes.array.isRequired,
+  project: PropTypes.object.isRequired,
   fetchProject: PropTypes.func.isRequired,
   onCreate: PropTypes.func.isRequired,
   modalClose: PropTypes.func.isRequired,
@@ -35,8 +38,8 @@ const renderOption = ({ value, removeOptionValue }) => {
     );
   };
 
-const UserCreate = ({ fetchProject, onCreate, modalClose }) => {
-  const [{ isCreating }, createUser] = useApi.post('/user/create');
+const UserCreate = ({ projects, project, fetchProject, onCreate, modalClose }) => {
+  const [{ isCreating }, createUser] = useApi.post(`/user/create`);
 
 
   return (
@@ -46,12 +49,14 @@ const UserCreate = ({ fetchProject, onCreate, modalClose }) => {
         name: '',
         email: '',
         isAdmin: false,
+        project: '',
         password: '',
         confirmPassword: '',
       }}
       validations={{
         name: Form.is.required(),
         email: [Form.is.required(), Form.is.email()],
+        project: [Form.is.required()],
         password: Form.is.required(),
         confirmPassword: [Form.is.required(), Form.is.match((value, fieldvalues) => {
             return value === fieldvalues.password
@@ -88,6 +93,13 @@ const UserCreate = ({ fetchProject, onCreate, modalClose }) => {
           name="isAdmin"
           label="Is Admin"
           options={[{value: true, label: true}, {value: false, label: false}]}
+          renderOption={renderOption}
+          renderValue={renderOption}
+        />
+        <Form.Field.Select
+          name="project"
+          label="Project"
+          options={projects.map(proj => ({value: proj.name, label: proj._id}))}
           renderOption={renderOption}
           renderValue={renderOption}
         />

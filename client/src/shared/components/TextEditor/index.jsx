@@ -4,11 +4,13 @@ import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
 
 import { EditorCont } from './Styles';
+import { useEffect } from 'react';
 
 const propTypes = {
   className: PropTypes.string,
   placeholder: PropTypes.string,
   defaultValue: PropTypes.string,
+  ignoreCacheDefaultvalue: PropTypes.bool,
   value: PropTypes.string,
   onChange: PropTypes.func,
   getEditor: PropTypes.func,
@@ -18,6 +20,7 @@ const defaultProps = {
   className: undefined,
   placeholder: undefined,
   defaultValue: undefined,
+  ignoreCacheDefaultvalue: false,
   value: undefined,
   onChange: () => {},
   getEditor: () => {},
@@ -31,6 +34,7 @@ const TextEditor = ({
   // expensive, but we're still accepting 'value' prop as alias for defaultValue because
   // other components like <Form.Field> feed their children with data via the 'value' prop
   value: alsoDefaultValue,
+  ignoreCacheDefaultvalue,
   onChange,
   getEditor,
 }) => {
@@ -60,6 +64,16 @@ const TextEditor = ({
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (ignoreCacheDefaultvalue) {
+      initialValueRef.current = defaultValue;
+      // Reinsert the updated initial value into the Quill instance
+      if ($editorRef.current) {
+        $editorRef.current.children[0].innerHTML = initialValueRef.current;
+      }
+    }
+  }, [defaultValue, ignoreCacheDefaultvalue])
 
   return (
     <EditorCont className={className} ref={$editorContRef}>
