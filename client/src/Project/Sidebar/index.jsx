@@ -56,7 +56,6 @@ const ProjectSidebar = ({projects, setCurrentProject, currentProject }) => {
   }, [currentProject])
 
   const onChange = (data) => {
-    console.log(data);
     setCurrentProject(data);
     setSelectedProject(data)
   }

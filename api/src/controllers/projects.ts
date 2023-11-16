@@ -26,8 +26,14 @@ export const getProjectWithUsersAndIssues = catchErrors(async (req, res) => {
   });
 });
 
-export const getAllProjects = catchErrors(async (_, res) => {
-  const projects = await Project.find().populate('users');
+export const getAllProjects = catchErrors(async (req, res) => {
+  const { currentUser } = req;
+  const { isAdmin } = currentUser;
+  let query = {};
+  if (!isAdmin) {
+    query = { users: { $in: [currentUser._id] } };
+  }
+  const projects = await Project.find(query).populate('users');
   res.respond({
     projects,
   });
