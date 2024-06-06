@@ -61,8 +61,8 @@ const UserSchema = new mongoose.Schema(
 const User = mongoose.model('User', UserSchema);
 
 User.create({
-    "name": "test user",
-    "email": "test@mail.com",
+    "name": "test",
+    "email": "pradeep@mail.com",
     "isAdmin": true,
     "password": "$2b$10$yjZoGbAHHwVZUGiX1ttkS.CCHi7RAT.nawrs343WageepB5kmhc/S",
     "comments": [],
