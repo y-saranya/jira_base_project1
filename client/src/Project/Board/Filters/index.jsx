@@ -1,6 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import React from 'react';
 import PropTypes from 'prop-types';
+import { xor } from 'lodash';
 
 import {
   Filters,
@@ -37,17 +38,7 @@ const ProjectBoardFilters = ({ projectUsers, defaultFilters, filters, mergeFilte
             <StyledAvatar
               avatarUrl={user.avatarUrl}
               name={user.name}
-              // onClick={() => mergeFilters({ userIds: xor(userIds, [user._id]) })}
-              title={user.name}
-            />
-          </AvatarIsActiveBorder>
-        ))}
-        {projectUsers.map(user => (
-          <AvatarIsActiveBorder key={user._id} isActive={userIds.includes(user._id)}>
-            <StyledAvatar
-              avatarUrl={user.avatarUrl}
-              name={user.name}
-              // onClick={() => mergeFilters({ userIds: xor(userIds, [user._id]) })}
+              onClick={() => mergeFilters({ userIds: xor(userIds, [user._id]) })}
               title={user.name}
             />
           </AvatarIsActiveBorder>
