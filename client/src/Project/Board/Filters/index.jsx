@@ -38,7 +38,7 @@ const ProjectBoardFilters = ({ projectUsers, defaultFilters, filters, mergeFilte
               avatarUrl={user.avatarUrl}
               name={user.name}
               // onClick={() => mergeFilters({ userIds: xor(userIds, [user._id]) })}
-              title="test"
+              title={user.name}
             />
           </AvatarIsActiveBorder>
         ))}
@@ -48,7 +48,7 @@ const ProjectBoardFilters = ({ projectUsers, defaultFilters, filters, mergeFilte
               avatarUrl={user.avatarUrl}
               name={user.name}
               // onClick={() => mergeFilters({ userIds: xor(userIds, [user._id]) })}
-              title="Nawaz"
+              title={user.name}
             />
           </AvatarIsActiveBorder>
         ))}
