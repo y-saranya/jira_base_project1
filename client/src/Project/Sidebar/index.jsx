@@ -26,11 +26,11 @@ const propTypes = {
   setCurrentProject: PropTypes.func.isRequired,
 };
 
-const options = [
-  { value: 'chocolate', label: 'Chocolate' },
-  { value: 'strawberry', label: 'Strawberry' },
-  { value: 'vanilla', label: 'Vanilla' },
-];
+// const options = [
+//   { value: 'chocolate', label: 'Chocolate' },
+//   { value: 'strawberry', label: 'Strawberry' },
+//   { value: 'vanilla', label: 'Vanilla' },
+// ];
 
 const ProjectOption = ({ data, innerRef, innerProps }) => {
   return (
@@ -41,36 +41,34 @@ const ProjectOption = ({ data, innerRef, innerProps }) => {
         <ProjectCategory>{ProjectCategoryCopy[data.category]} project</ProjectCategory>
       </ProjectTexts>
     </ProjectInfo>
-  )
-}
+  );
+};
 
-const ProjectSidebar = ({projects, setCurrentProject, currentProject }) => {
+const ProjectSidebar = ({ projects, setCurrentProject, currentProject }) => {
   const match = useRouteMatch();
   const { currentUser } = useCurrentUser();
   const [selectedProject, setSelectedProject] = useState(currentProject);
 
   useEffect(() => {
-      if (currentProject) {
-        setSelectedProject(currentProject);
-      }
-  }, [currentProject])
+    if (currentProject) {
+      setSelectedProject(currentProject);
+    }
+  }, [currentProject]);
 
-  const onChange = (data) => {
+  const onChange = data => {
     setCurrentProject(data);
-    setSelectedProject(data)
-  }
+    setSelectedProject(data);
+  };
 
   return (
     <Sidebar>
-      <div
-        style={{marginTop: 10, marginBottom: 10}}
-      >
+      <div style={{ marginTop: 10, marginBottom: 10 }}>
         {selectedProject && projects && projects.length > 0 && (
           <Select
             value={selectedProject}
             onChange={onChange}
             isSearchable={false}
-            formatOptionLabel={(data) => (
+            formatOptionLabel={data => (
               <ProjectInfo key={data._id}>
                 <ProjectTexts>
                   <ProjectName>{data.name}</ProjectName>
@@ -88,7 +86,12 @@ const ProjectSidebar = ({projects, setCurrentProject, currentProject }) => {
 
       {renderLinkItem(match, 'Kanban Board', 'board', '/board')}
       {currentUser && currentUser.isAdmin && renderLinkItem(match, 'Users', 'user', '/users')}
-      {currentUser && currentUser.isAdmin && renderLinkItem(match, 'Project settings', 'settings', '/settings')}
+      {currentUser &&
+        currentUser.isAdmin &&
+        renderLinkItem(match, 'Project settings', 'settings', '/settings')}
+      {currentUser &&
+        currentUser.isAdmin &&
+        renderLinkItem(match, 'My Report', 'settings', '/settings')}
       <Divider />
       {renderLinkItem(match, 'Releases', 'shipping')}
       {renderLinkItem(match, 'Issues and filters', 'issues')}
