@@ -47,6 +47,7 @@ export const issueStatusColors = {
   [IssueStatus.INPROGRESS]: '#fff',
   [IssueStatus.SELECTED]: color.textDark,
   [IssueStatus.DONE]: '#fff',
+  [IssueStatus.Testing]: 'white',
 };
 
 export const issueStatusBackgroundColors = {
@@ -54,6 +55,8 @@ export const issueStatusBackgroundColors = {
   [IssueStatus.INPROGRESS]: color.primary,
   [IssueStatus.SELECTED]: color.backgroundMedium,
   [IssueStatus.DONE]: color.success,
+  [IssueStatus.Testing]: '#CD1317',
+  [IssueStatus.TestingDone]: '#57A55A',
 };
 
 export const sizes = {
