@@ -47,6 +47,18 @@ export const Divider = styled.div`
   padding-top: 18px;
   border-top: 1px solid ${color.borderLight};
 `;
+export const MyButton = styled.div`
+  background-color: blue;
+  color: white;
+  padding: 5px;
+  position: relative;
+  top: -27px;
+  left: 200px;
+  cursor: pointer;
+  &:hover {
+    background-color: lightblue;
+  }
+`;
 
 export const LinkItem = styled.div`
   position: relative;

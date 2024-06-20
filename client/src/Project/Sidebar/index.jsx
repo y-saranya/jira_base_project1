@@ -15,6 +15,7 @@ import {
   ProjectName,
   ProjectCategory,
   Divider,
+  MyButton,
   LinkItem,
   LinkText,
   NotImplemented,
@@ -60,8 +61,24 @@ const ProjectSidebar = ({ projects, setCurrentProject, currentProject }) => {
     setSelectedProject(data);
   };
 
+  function onClick() {
+    const side = document.getElementById('sidebar');
+    const mybutton = document.getElementById('button');
+    const myboard = document.getElementById('board');
+
+    if (mybutton.innerHTML === '&lt;&lt;') {
+      side.style.transform = 'translate(-215px)';
+      mybutton.innerHTML = '&gt;&gt;';
+      myboard.style.paddingLeft = '130px';
+    } else {
+      side.style.transform = 'translate(0px)';
+      mybutton.innerHTML = '&lt;&lt;';
+      myboard.style.paddingLeft = '334px';
+    }
+  }
+
   return (
-    <Sidebar>
+    <Sidebar id="sidebar">
       <div style={{ marginTop: 10, marginBottom: 10 }}>
         {selectedProject && projects && projects.length > 0 && (
           <Select
@@ -93,6 +110,9 @@ const ProjectSidebar = ({ projects, setCurrentProject, currentProject }) => {
         currentUser.isAdmin &&
         renderLinkItem(match, 'My Report', 'settings', '/settings')}
       <Divider />
+      <MyButton onClick={onClick} id="button">
+        &lt;&lt;
+      </MyButton>
       {renderLinkItem(match, 'Releases', 'shipping')}
       {renderLinkItem(match, 'Issues and filters', 'issues')}
       {renderLinkItem(match, 'Pages', 'page', '/pages')}
