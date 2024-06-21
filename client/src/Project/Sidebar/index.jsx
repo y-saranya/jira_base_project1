@@ -108,7 +108,7 @@ const ProjectSidebar = ({ projects, setCurrentProject, currentProject }) => {
         renderLinkItem(match, 'Project settings', 'settings', '/settings')}
       {currentUser &&
         currentUser.isAdmin &&
-        renderLinkItem(match, 'My Report', 'settings', '/settings')}
+        renderLinkItem(match, 'My Report', 'myreport', '/Report')}
       <Divider />
       <MyButton onClick={onClick} id="button">
         &lt;&lt;

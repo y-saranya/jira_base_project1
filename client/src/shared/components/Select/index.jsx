@@ -13,7 +13,6 @@ import {
   Placeholder,
   ValueMulti,
   ValueMultiItem,
-  AddMore,
 } from './Styles';
 
 const propTypes = {
@@ -165,14 +164,10 @@ const Select = ({
               ) : (
                 <ValueMultiItem key={optionValue} onClick={() => removeOptionValue(optionValue)}>
                   {getOptionLabel(optionValue)}
-                  <Icon type="close" size={14} />
+                  <Icon type="close" size={12} />
                 </ValueMultiItem>
               ),
             )}
-            <AddMore>
-              <Icon type="plus" />
-              Add more
-            </AddMore>
           </ValueMulti>
         )}
 

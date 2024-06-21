@@ -10,6 +10,7 @@ import useCurrentUser from 'shared/hooks/currentUser';
 import UserCreate from 'Project/UserCreate';
 import Users from 'Project/Users';
 import Pages from 'Project/Pages';
+import Report from 'Project/Report';
 import ProjectCreate from 'Project/CreateProject';
 import IssueSearch from 'Project/IssueSearch';
 
@@ -143,6 +144,7 @@ const Project = () => {
           render={() => <ProjectSettings project={currentProject} fetchProject={fetchProject} />}
         />
       )}
+      {currentProject && <Route path={`${match.path}/Report`} render={() => <Report />} />}
 
       {currentUser && currentUser.isAdmin && (
         <Route path={`${match.path}/users`} render={() => <Users fetchProject={fetchProject} />} />
