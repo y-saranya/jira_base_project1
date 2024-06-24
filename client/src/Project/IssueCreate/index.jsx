@@ -98,7 +98,7 @@ const ProjectIssueCreate = ({ project, fetchProject, onCreate, modalClose }) => 
           renderValue={renderUser(project)}
         />
         <Form.Field.Select
-          isMulti
+          // isMulti
           name="userIds"
           label="Assignees"
           tio="People who are responsible for dealing with this issue."
