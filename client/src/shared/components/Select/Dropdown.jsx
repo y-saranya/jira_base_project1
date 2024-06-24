@@ -63,7 +63,7 @@ const SelectDropdown = ({
   const selectOptionValue = optionValue => {
     deactivateDropdown();
     if (isMulti) {
-      onChange(uniq([value, optionValue]));
+      onChange(uniq([...value, optionValue]));
     } else {
       onChange(optionValue);
     }
