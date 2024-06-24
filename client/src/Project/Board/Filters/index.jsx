@@ -25,14 +25,6 @@ const ProjectBoardFilters = ({ projectUsers, defaultFilters, filters, mergeFilte
 
   const areFiltersCleared = !searchTerm && userIds.length === 0 && !myOnly && !recent;
 
-  function toTitleCase(str) {
-    return str
-      .toLowerCase()
-      .split(' ')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
-  }
-
   return (
     <Filters data-testid="board-filters">
       <SearchInput
@@ -47,7 +39,7 @@ const ProjectBoardFilters = ({ projectUsers, defaultFilters, filters, mergeFilte
               avatarUrl={user.avatarUrl}
               name={user.name}
               onClick={() => mergeFilters({ userIds: xor(userIds, [user._id]) })}
-              title={toTitleCase(user.name)}
+              title={user.name}
             />
           </AvatarIsActiveBorder>
         ))}
