@@ -22,15 +22,17 @@ const ProjectBoardIssueDetailsAssigneesReporter = ({ issue, updateIssue, project
     <Fragment>
       <SectionTitle>Assignees</SectionTitle>
       <Select
-        isMulti
+        // isMulti
         variant="empty"
         dropdownWidth={343}
         placeholder="Unassigned"
         name="assignees"
-        value={issue.users.map(user => user._id)}
+        // value={issue.users.map(user => user._id)}
+        value={issue.users[0] && issue.users._id}
         options={userOptions}
-        onChange={userIds => {
-          updateIssue({ userIds, users: userIds.map(getUserById) });
+        onChange={userId => {
+          // updateIssue({ userIds, users: userIds.map(getUserById) });
+          updateIssue({ userIds: [userId], users: [getUserById(userId)] });
         }}
         renderValue={({ value: userId, removeOptionValue }) =>
           renderUser(getUserById(userId), true, removeOptionValue)
