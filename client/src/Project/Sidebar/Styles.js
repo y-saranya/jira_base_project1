@@ -48,12 +48,13 @@ export const Divider = styled.div`
   border-top: 1px solid ${color.borderLight};
 `;
 export const MyButton = styled.div`
-  background-color: blue;
+  background-color: #5a7dfa;
   color: white;
-  padding: 5px;
-  position: relative;
-  top: -27px;
-  left: 200px;
+  padding: 3px 7px;
+  border-radius: 3px;
+  position: absolute;
+  top: 240px;
+  left: 215px;
   cursor: pointer;
   &:hover {
     background-color: lightblue;

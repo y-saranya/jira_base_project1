@@ -67,7 +67,7 @@ const ProjectSidebar = ({ projects, setCurrentProject, currentProject }) => {
     const myboard = document.getElementById('board');
 
     if (mybutton.innerHTML === '&lt;&lt;') {
-      side.style.transform = 'translate(-215px)';
+      side.style.transform = 'translate(-220px)';
       mybutton.innerHTML = '&gt;&gt;';
       myboard.style.paddingLeft = '130px';
     } else {
@@ -79,45 +79,47 @@ const ProjectSidebar = ({ projects, setCurrentProject, currentProject }) => {
 
   return (
     <Sidebar id="sidebar">
-      <div style={{ marginTop: 10, marginBottom: 10 }}>
-        {selectedProject && projects && projects.length > 0 && (
-          <Select
-            value={selectedProject}
-            onChange={onChange}
-            isSearchable={false}
-            formatOptionLabel={data => (
-              <ProjectInfo key={data._id}>
-                <ProjectTexts>
-                  <ProjectName>{data.name}</ProjectName>
-                  <ProjectCategory>{ProjectCategoryCopy[data.category]} project</ProjectCategory>
-                </ProjectTexts>
-              </ProjectInfo>
-            )}
-            components={{
-              Option: ProjectOption,
-            }}
-            options={projects}
-          />
-        )}
-      </div>
+      <div style={{ width: 190 }}>
+        <div style={{ marginTop: 10, marginBottom: 10 }}>
+          {selectedProject && projects && projects.length > 0 && (
+            <Select
+              value={selectedProject}
+              onChange={onChange}
+              isSearchable={false}
+              formatOptionLabel={data => (
+                <ProjectInfo key={data._id}>
+                  <ProjectTexts>
+                    <ProjectName>{data.name}</ProjectName>
+                    <ProjectCategory>{ProjectCategoryCopy[data.category]} project</ProjectCategory>
+                  </ProjectTexts>
+                </ProjectInfo>
+              )}
+              components={{
+                Option: ProjectOption,
+              }}
+              options={projects}
+            />
+          )}
+        </div>
 
-      {renderLinkItem(match, 'Kanban Board', 'board', '/board')}
-      {currentUser && currentUser.isAdmin && renderLinkItem(match, 'Users', 'user', '/users')}
-      {currentUser &&
-        currentUser.isAdmin &&
-        renderLinkItem(match, 'Project settings', 'settings', '/settings')}
-      {currentUser &&
-        currentUser.isAdmin &&
-        renderLinkItem(match, 'My Report', 'myreport', '/Report')}
-      <Divider />
+        {renderLinkItem(match, 'Kanban Board', 'board', '/board')}
+        {currentUser && currentUser.isAdmin && renderLinkItem(match, 'Users', 'user', '/users')}
+        {currentUser &&
+          currentUser.isAdmin &&
+          renderLinkItem(match, 'Project settings', 'settings', '/settings')}
+        {currentUser &&
+          currentUser.isAdmin &&
+          renderLinkItem(match, 'My Report', 'myreport', '/Report')}
+        <Divider />
+        {renderLinkItem(match, 'Releases', 'shipping')}
+        {renderLinkItem(match, 'Issues and filters', 'issues')}
+        {renderLinkItem(match, 'Pages', 'page', '/pages')}
+        {renderLinkItem(match, 'Reports', 'reports')}
+        {renderLinkItem(match, 'Components', 'component')}
+      </div>
       <MyButton onClick={onClick} id="button">
         &lt;&lt;
       </MyButton>
-      {renderLinkItem(match, 'Releases', 'shipping')}
-      {renderLinkItem(match, 'Issues and filters', 'issues')}
-      {renderLinkItem(match, 'Pages', 'page', '/pages')}
-      {renderLinkItem(match, 'Reports', 'reports')}
-      {renderLinkItem(match, 'Components', 'component')}
     </Sidebar>
   );
 };
